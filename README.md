@@ -1,0 +1,1 @@
+# springdoc-openapi-maven-plugin
