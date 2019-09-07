@@ -1,6 +1,6 @@
 
 
-package org.springdoc.maven.plugin.mvc;
+package org.springdoc.maven.plugin;
 
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;

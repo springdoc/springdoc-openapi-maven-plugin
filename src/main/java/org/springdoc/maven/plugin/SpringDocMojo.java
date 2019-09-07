@@ -1,4 +1,4 @@
-package org.springdoc.maven.plugin.mvc;
+package org.springdoc.maven.plugin;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
