@@ -4,43 +4,49 @@
 ## **Introduction to springdoc-openapi-maven-plugin**
 
 The aim of springdoc-openapi-maven-plugin is to generate json and yaml OpenAPI description  during build time. 
-The plugin works during integration-tests phase, and generate the OpenAPI description.
-
+The plugin works during integration-tests phase, and generate the OpenAPI description. 
 The plugin works in conjunction with spring-boot-maven plugin. 
- In order to use this functionality, you need to add the plugin declaration on your pom.xml, plugins section:
+
+You can test it during the integration tests phase using the maven command:
+
+```properties
+mvn verify
+```
+
+In order to use this functionality, you need to add the plugin declaration on your pom.xml, plugins section:
 
 ```xml
 <plugin>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-maven-plugin</artifactId>
-	<version>2.1.8.RELEASE</version>
-	<executions>
-		<execution>
-			<id>pre-integration-test</id>
-			<goals>
-				<goal>start</goal>
-			</goals>
-		</execution>
-		<execution>
-			<id>post-integration-test</id>
-			<goals>
-				<goal>stop</goal>
-			</goals>
-		</execution>
-	</executions>
+ <groupId>org.springframework.boot</groupId>
+ <artifactId>spring-boot-maven-plugin</artifactId>
+ <version>2.1.8.RELEASE</version>
+ <executions>
+  <execution>
+   <id>pre-integration-test</id>
+   <goals>
+    <goal>start</goal>
+   </goals>
+  </execution>
+  <execution>
+   <id>post-integration-test</id>
+   <goals>
+    <goal>stop</goal>
+   </goals>
+  </execution>
+ </executions>
 </plugin>
 <plugin>
-	<groupId>org.springdoc</groupId>
-	<artifactId>springdoc-openapi-maven-plugin</artifactId>
-	<version>0.2</version>
-	<executions>
-		<execution>
-			<id>integration-test</id>
-			<goals>
-				<goal>generate</goal>
-			</goals>
-		</execution>
-	</executions>
+ <groupId>org.springdoc</groupId>
+ <artifactId>springdoc-openapi-maven-plugin</artifactId>
+ <version>0.2</version>
+ <executions>
+  <execution>
+   <id>integration-test</id>
+   <goals>
+    <goal>generate</goal>
+   </goals>
+  </execution>
+ </executions>
 <plugin>
 ```
 			
@@ -56,21 +62,21 @@ It possible to customise the following plugin properties:
 
 ```xml
 <plugin>
-	<groupId>org.springdoc</groupId>
-	<artifactId>springdoc-openapi-maven-plugin</artifactId>
-	<version>0.2</version>
-	<executions>
-		<execution>
-			<id>integration-test</id>
-			<goals>
-				<goal>generate</goal>
-			</goals>
-		</execution>
-	</executions>
-	<configuration>
-		<apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
-		<outputFileName>openapi.json</outputFileName>
-		<outputDir>/home/springdoc/maven-output</outputDir>
-	</configuration>
+ <groupId>org.springdoc</groupId>
+ <artifactId>springdoc-openapi-maven-plugin</artifactId>
+ <version>0.2</version>
+ <executions>
+  <execution>
+   <id>integration-test</id>
+   <goals>
+    <goal>generate</goal>
+   </goals>
+  </execution>
+ </executions>
+ <configuration>
+  <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
+  <outputFileName>openapi.json</outputFileName>
+  <outputDir>/home/springdoc/maven-output</outputDir>
+ </configuration>
 </plugin>
 ```
