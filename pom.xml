@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springdoc</groupId>
 	<artifactId>springdoc-openapi-maven-plugin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 	<name>springdoc-openapi-maven-plugin Maven Plugin</name>
 	<url>http://springdoc.org</url>
