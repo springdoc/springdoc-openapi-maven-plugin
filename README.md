@@ -13,7 +13,7 @@ You can test it during the integration tests phase using the maven command:
 mvn verify
 ```
 
-In order to use this functionality, you need to add the plugin declaration on your pom.xml, plugins section:
+In order to use this functionality, you need to add the plugin declaration on the plugins section of your pom.xml:
 
 ```xml
 <plugin>
