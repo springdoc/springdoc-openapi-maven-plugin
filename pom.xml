@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springdoc</groupId>
 	<artifactId>springdoc-openapi-maven-plugin</artifactId>
-	<version>0.1</version>
+	<version>0.2-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 	<name>springdoc-openapi-maven-plugin Maven Plugin</name>
 	<url>http://springdoc.org</url>
@@ -27,7 +27,7 @@
 		<url>git@github.com:springdoc/springdoc-openapi-maven-plugin.git</url>
 		<connection>scm:git:git@github.com:springdoc/springdoc-openapi-maven-plugin.git</connection>
 		<developerConnection>scm:git:git@github.com:springdoc/springdoc-openapi-maven-plugin.git</developerConnection>
-		<tag>v0.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<distributionManagement>
 		<snapshotRepository>
