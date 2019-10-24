@@ -47,7 +47,7 @@ In order to use this functionality, you need to add the plugin declaration on th
    </goals>
   </execution>
  </executions>
-<plugin>
+</plugin>
 ```
 			
 ## **Custom settings of the springdoc-openapi-maven-plugin**
