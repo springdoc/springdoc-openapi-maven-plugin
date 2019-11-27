@@ -44,6 +44,7 @@ public class SpringDocMojo extends AbstractMojo {
 			String result = null;
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				result = this.readFullyAsString(conection.getInputStream());
+				outputDir.mkdirs();
 				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes());
 			} else {
 				getLog().error("An error has occured: Response code " + responseCode);
