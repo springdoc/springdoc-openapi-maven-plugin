@@ -8,12 +8,17 @@ cache:
   
 addons:
   sonarcloud:
-    organization: "springdoc"
+    organization: "springdoc-openapi"
     token:
-      secure: $SONAR_TOKEN
+      secure: "ZIca+UqMu8BIQuezra6E7UO7ItTonf6iethCoo10UC0RNe9GHUbn55lE8iXIoHq9nqyOZ/mLGGGZLyidUs5mJxB1Z7aemEcKOOzHFffnrEX8CrHwVDDTo/dr5Dy0/fwVunsQ5GrtnZVLTaXGFBiKUQr4oWirqaydDUb18NlU4aUJFg3+VobzFeftMniN/fxf6xUQZQXTHSMescTiHUvzLkidn8NVe7jrl5TIPXDnPe+IsMstZsY9Y1Sy4ASZyTsP9esZwQYdpWxaNQwEaS0vrd9gHgh7bqcMEarJeDZMizVN26dYu7OFHLME37HfQgPiR2GbmT7tnBsi/6AOEib1iHQL10pchk/dOEqtawTROZE308MDxvkjxZMUpVBB6SYbLPAk6Y4haYzxJZIMGWTL1isJwh5Gp51BoWIRfiKU8XEmgLkLQGx8jl/NBBpV8YGxzdCKIyGZtt5q0H9yIVuAKmFUf/w2OnNTq+SIcY7rjn34QFSK2rpCYhJEhqcIeRVZccN+RvaTKkpHszei6vt31LOiZ4dSvB1OdvSnuPTUJbZ4fsTgKHYGomVjHm85MceaJxjwNACC28NrQCa3Z4AmPL6rqgdAZukqEVeLbACcTFldV8RapV92Rikhhbrt9ri1fS/ibqBKVxzQSMrmCfvnaCMWPI0czS9Jgk9L8ZCgawk="
+script:
+  - mvn clean package --settings settings.xml
 
-after_success:
-  - mvn clean deploy --settings settings.xml
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar
+deploy:
+  provider: script
+  script: mvn clean deploy -DskipTests sonar:sonar   -Dsonar.projectKey=springdoc_springdoc-openapi-maven-plugin --settings settings.xml
+  on:
+    branch: master
+
   
   
