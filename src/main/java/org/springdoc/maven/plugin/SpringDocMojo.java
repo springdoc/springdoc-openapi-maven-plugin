@@ -44,8 +44,7 @@ public class SpringDocMojo extends AbstractMojo {
 			String result = null;
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				result = this.readFullyAsString(conection.getInputStream());
-				outputDir.mkdirs();
-				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
+				createOutputDirectoriesAndWrite(result);
 			} else {
 				getLog().error("An error has occured: Response code " + responseCode);
 			}
@@ -54,6 +53,12 @@ public class SpringDocMojo extends AbstractMojo {
 		}
 	}
 
+	private void createOutputDirectoriesAndWrite(String result) throws IOException {
+		for (File output : outputDirs) {
+			output.mkdirs();
+			Files.write(Paths.get(output.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
+		}
+	}
 
 	private String readFullyAsString(InputStream inputStream) throws IOException {
 		return readFully(inputStream).toString(StandardCharsets.UTF_8.name());
