@@ -30,8 +30,8 @@ public class SpringDocMojo extends AbstractMojo {
 	@Parameter(defaultValue = "openapi.json", property = "outputFileName", required = true)
 	private String outputFileName;
 
-	@Parameter(defaultValue = "${project.build.directory}", property = "outputDir", required = true)
-	private File outputDir;
+	@Parameter(defaultValue = "${project.build.directory}", property = "outputDirs", required = true)
+	private File[] outputDirs;
 
 	private static final String GET = "GET";
 
