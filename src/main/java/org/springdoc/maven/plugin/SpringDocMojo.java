@@ -11,10 +11,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
 
 /**
  * Goal which touches a timestamp file.
@@ -33,6 +36,19 @@ public class SpringDocMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${project.build.directory}", property = "outputDir", required = true)
 	private File outputDir;
 
+	/**
+	 * Attach generated documentation as artifact to the Maven project.
+	 * If true documentation will be deployed along with other artifacts.
+	 */
+	@Parameter(defaultValue = "false", property = "attachArtifact")
+	private boolean attachArtifact;
+
+	@Parameter(defaultValue = "${project}", readonly = true)
+	private MavenProject project;
+
+	@Component
+	private MavenProjectHelper projectHelper;
+
 	private static final String GET = "GET";
 
 	public void execute() {
@@ -46,6 +62,7 @@ public class SpringDocMojo extends AbstractMojo {
 				result = this.readFullyAsString(conection.getInputStream());
 				outputDir.mkdirs();
 				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
+				if (attachArtifact) addArtifactToMaven();
 			} else {
 				getLog().error("An error has occured: Response code " + responseCode);
 			}
@@ -67,5 +84,10 @@ public class SpringDocMojo extends AbstractMojo {
 			baos.write(buffer, 0, length);
 		}
 		return baos;
+	}
+
+	private void addArtifactToMaven() {
+		File swaggerFile = new File(outputDir.getAbsolutePath() + '/' + outputFileName);
+		projectHelper.attachArtifact(project, "json", "openapi", swaggerFile);
 	}
 }
