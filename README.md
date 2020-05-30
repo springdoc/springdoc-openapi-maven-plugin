@@ -19,7 +19,7 @@ In order to use this functionality, you need to add the plugin declaration on th
 <plugin>
  <groupId>org.springframework.boot</groupId>
  <artifactId>spring-boot-maven-plugin</artifactId>
- <version>2.1.8.RELEASE</version>
+ <version>2.3.0.RELEASE</version>
  <executions>
   <execution>
    <id>pre-integration-test</id>
