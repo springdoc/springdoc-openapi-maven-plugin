@@ -31,6 +31,7 @@ import org.apache.maven.project.MavenProjectHelper;
 public class SpringDocMojo extends AbstractMojo {
 
 	private static final String GET = "GET";
+
 	private static final java.util.regex.Pattern yamlPattern = Pattern.compile(".ya?ml");
 
 	@Parameter(defaultValue = "http://localhost:8080/v3/api-docs", property = "apiDocsUrl", required = true)
@@ -86,7 +87,7 @@ public class SpringDocMojo extends AbstractMojo {
 
 	String prettyPrint(String result) {
 		final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		if(StringUtils.equalsIgnoreCase(format, "json")) {
+		if (StringUtils.equalsIgnoreCase(format, "json")) {
 			final JsonElement jsonElement = new JsonParser().parse(result);
 			return gson.toJson(jsonElement);
 		}
@@ -97,10 +98,10 @@ public class SpringDocMojo extends AbstractMojo {
 	void writeFile(String outputFileName, String result) {
 		final String outputDirPath = outputDir.getAbsolutePath() + "/";
 		final byte[] resultBytes = result.getBytes(StandardCharsets.UTF_8);
-		
+
 		try {
 			Files.write(
-				Paths.get(outputDirPath + "/" + outputFileName), resultBytes);
+					Paths.get(outputDirPath + "/" + outputFileName), resultBytes);
 		}
 		catch (IOException e) {
 			getLog().error("An error generating file has occurred", e);
@@ -110,7 +111,7 @@ public class SpringDocMojo extends AbstractMojo {
 
 	String getValidatedFormat() {
 		format = StringUtils.lowerCase(format);
-		switch(format) {
+		switch (format) {
 			case "yaml":
 			case "json":
 				return format;
@@ -131,7 +132,7 @@ public class SpringDocMojo extends AbstractMojo {
 
 	String getValidatedApiDocsUrl() {
 		final Matcher urlMatcher = yamlPattern.matcher(apiDocsUrl);
-		if(format.equalsIgnoreCase("yaml")) {
+		if (format.equalsIgnoreCase("yaml")) {
 			if (!urlMatcher.matches())
 				return "http://localhost:8080/v3/api-docs.yaml";
 		}
