@@ -57,8 +57,12 @@ It possible to customise the following plugin properties:
     * The default value is: http://localhost:8080/v3/api-docs
 *  outputDir: The output directory, where to generate the OpenAPI description.
     * The default value is: ${project.build.directory}
-*   outputFileName: The file name that contains the OpenAPI description.  
+*  outputFileName: The file name that contains the OpenAPI description.  
     * The default value is: openapi.json
+*  format: Output format of the OpenAPI generated file  
+    * The default value is: json
+    * Available options are: json or yaml
+
 
 ```xml
 <plugin>
@@ -77,6 +81,7 @@ It possible to customise the following plugin properties:
   <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
   <outputFileName>openapi.json</outputFileName>
   <outputDir>/home/springdoc/maven-output</outputDir>
+  <format>json</format>
  </configuration>
 </plugin>
 ```
