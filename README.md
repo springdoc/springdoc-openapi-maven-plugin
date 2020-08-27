@@ -59,6 +59,8 @@ It possible to customise the following plugin properties:
     * The default value is: ${project.build.directory}
 *   outputFileName: The file name that contains the OpenAPI description.  
     * The default value is: openapi.json
+*   skip: Skip execution if set to true.
+    * The default value is: false
 
 ```xml
 <plugin>
@@ -77,6 +79,7 @@ It possible to customise the following plugin properties:
   <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
   <outputFileName>openapi.json</outputFileName>
   <outputDir>/home/springdoc/maven-output</outputDir>
+  <skip>false</skip>
  </configuration>
 </plugin>
 ```
