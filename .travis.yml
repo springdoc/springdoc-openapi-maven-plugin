@@ -10,7 +10,8 @@ addons:
   sonarcloud:
     organization: "springdoc-openapi"
     token:
-      secure: ${SONAR_TOKEN}
+      secure: "SeyyJjP6S/Wc7C2LFJB15rLt4A29gcmi3y91MSj9gqgxVRYX9DAqJiZTRL3rl5jSmfKE1bwhlLE8BET0oE4CzxUC44kAUMg1yLygsaLQwJ6IQ9nMf+xT7gLzf2/N+KCQG6NuxUvu39vcqrtBzpBSg8y1xWAZzQYaQ7GX2stbBZc5t4EvnSjpaWlijD9R8399UVjDu/R60R8zkS0KlSbAX4ES7WRhnipVbHqxzC9ixv4F4ilScSGK/DZjQGmwHh0YwkvoAtphAyHof1E6afttsoRy2KQxXrRF8P2EAWTGrQiI1Sn7005+/qvtE0WC5JI2TbjdKBR1+9BBS5XwwHNWfbEprXFAbeqbw9gBreI3U8mdKyGS6e+Iw5SCsgRpgQhvzaeQg6DXuYwn/Ij22I9/HjziPhiqQ86Ex7F4h5vH70wZfy5v12kxT7aAjtv3QYrbXjNh2rmv+wh6tctq/yUotwbywdDlYsN9kCNG3G8+ZuGQPjOfHjoowG3JZnLgg7eaU2buCQPSo91l21JOkmFAEJLZqvmdnTwY0WjQ93Fln8itcMzBeNbeoEptzhHSMtwpLG9+Qxd19sJJxp4mYh4/0QkdtVdhmfTd4MWSwjQu1s9LeYQKMNh2UER51kwOr/19iXNlRmPFupYUGO0J9cEfNZZVxNx+ULu9D3AMEc8SZPU="
+
 script:
   - mvn clean package sonar:sonar -Dsonar.projectKey=springdoc_springdoc-openapi-maven-plugin --settings settings.xml
 
