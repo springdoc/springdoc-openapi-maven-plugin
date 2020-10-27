@@ -13,7 +13,7 @@ addons:
       secure: "$SONAR_TOKEN"
 
 script:
-  - mvn clean package sonar:sonar -Dsonar.projectKey=springdoc_springdoc-openapi-maven-plugin --settings settings.xml
+  - mvn clean package sonar:sonar -Dsonar.projectKey=springdoc_springdoc-openapi-maven-plugin
 
 deploy:
   provider: script
