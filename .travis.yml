@@ -9,8 +9,6 @@ cache:
 addons:
   sonarcloud:
     organization: "springdoc-openapi"
-    token:
-      secure: "$SONAR_TOKEN"
 
 script:
   - mvn clean package sonar:sonar -Dsonar.projectKey=springdoc_springdoc-openapi-maven-plugin
