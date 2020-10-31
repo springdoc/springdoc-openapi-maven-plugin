@@ -19,7 +19,7 @@ In order to use this functionality, you need to add the plugin declaration on th
 <plugin>
  <groupId>org.springframework.boot</groupId>
  <artifactId>spring-boot-maven-plugin</artifactId>
- <version>2.3.5.RELEASE</version>
+ <version>2.3.4.RELEASE</version>
  <configuration>
     <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
  </configuration>
@@ -41,7 +41,7 @@ In order to use this functionality, you need to add the plugin declaration on th
 <plugin>
  <groupId>org.springdoc</groupId>
  <artifactId>springdoc-openapi-maven-plugin</artifactId>
- <version>1.0</version>
+ <version>1.1</version>
  <executions>
   <execution>
    <id>integration-test</id>
@@ -69,7 +69,7 @@ It possible to customise the following plugin properties:
 <plugin>
  <groupId>org.springdoc</groupId>
  <artifactId>springdoc-openapi-maven-plugin</artifactId>
- <version>1.0</version>
+ <version>1.1</version>
  <executions>
   <execution>
    <id>integration-test</id>
