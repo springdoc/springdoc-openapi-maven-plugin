@@ -10,7 +10,7 @@ The plugin works in conjunction with spring-boot-maven plugin.
 You can test it during the integration tests phase using the maven command:
 
 ```properties
-mvn verify -Dspring.application.admin.enabled=true
+mvn verify
 ```
 
 In order to use this functionality, you need to add the plugin declaration on the plugins section of your pom.xml:
@@ -19,7 +19,10 @@ In order to use this functionality, you need to add the plugin declaration on th
 <plugin>
  <groupId>org.springframework.boot</groupId>
  <artifactId>spring-boot-maven-plugin</artifactId>
- <version>2.3.0.RELEASE</version>
+ <version>2.3.5.RELEASE</version>
+ <configuration>
+    <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+ </configuration>
  <executions>
   <execution>
    <id>pre-integration-test</id>
