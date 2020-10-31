@@ -46,12 +46,22 @@ public class SpringDocMojo extends AbstractMojo {
 	@Parameter(defaultValue = "${project}", readonly = true)
 	private MavenProject project;
 
+	/**
+	 * Skip execution if set to true. Default is false.
+	 */
+	@Parameter(defaultValue = "false", property = "skip")
+	private boolean skip;
+
 	@Component
 	private MavenProjectHelper projectHelper;
 
 	private static final String GET = "GET";
 
 	public void execute() {
+		if (skip) {
+			getLog().info("Skip execution as per configuration");
+			return;
+		}
 		try {
 			URL urlForGetRequest = new URL(apiDocsUrl);
 			HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
