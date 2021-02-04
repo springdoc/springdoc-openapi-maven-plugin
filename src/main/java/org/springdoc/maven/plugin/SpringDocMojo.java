@@ -24,7 +24,7 @@ import org.apache.maven.project.MavenProjectHelper;
  *
  */
 
-@Mojo(name = "generate", requiresProject = true, defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresDependencyResolution = ResolutionScope.TEST)
+@Mojo(name = "generate", requiresProject = true, defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresDependencyResolution = ResolutionScope.TEST, threadSafe = true)
 public class SpringDocMojo extends AbstractMojo {
 
 	@Parameter(defaultValue = "http://localhost:8080/v3/api-docs", property = "apiDocsUrl", required = true)
