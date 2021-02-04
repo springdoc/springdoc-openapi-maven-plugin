@@ -11,7 +11,7 @@ addons:
     organization: "springdoc-openapi"
 
 script:
-  - mvn clean package sonar:sonar -Dsonar.projectKey=springdoc_springdoc-openapi-maven-plugin
+  - mvn clean package sonar:sonar -Dsonar.projectKey=springdoc_springdoc-openapi-maven-plugin -Dsonar.scanner.force-deprecated-java-version-grace-period=true
 
 deploy:
   provider: script
