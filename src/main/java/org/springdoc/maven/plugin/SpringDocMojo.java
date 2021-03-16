@@ -63,7 +63,7 @@ public class SpringDocMojo extends AbstractMojo {
 	/**
 	 * Skip execution if set to true. Default is false.
 	 */
-	@Parameter(defaultValue = "false", property = "skip")
+	@Parameter(defaultValue = "false", property = "springdoc.skip")
 	private boolean skip;
 
 	@Component
