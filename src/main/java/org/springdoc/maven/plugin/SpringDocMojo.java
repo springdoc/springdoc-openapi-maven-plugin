@@ -20,10 +20,9 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 
 /**
- * Goal which touches a timestamp file.
+ * Generate a openapi specification file.
  *
  */
-
 @Mojo(name = "generate", requiresProject = true, defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresDependencyResolution = ResolutionScope.TEST, threadSafe = true)
 public class SpringDocMojo extends AbstractMojo {
 
@@ -35,6 +34,9 @@ public class SpringDocMojo extends AbstractMojo {
 
 	@Parameter(defaultValue = "${project.build.directory}", property = "outputDir", required = true)
 	private File outputDir;
+
+	@Parameter(defaultValue = "json", property = "outputFileType" , required = true)
+	private String outputFileType;
 
 	/**
 	 * Attach generated documentation as artifact to the Maven project.
@@ -67,9 +69,8 @@ public class SpringDocMojo extends AbstractMojo {
 			HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
 			conection.setRequestMethod(GET);
 			int responseCode = conection.getResponseCode();
-			String result = null;
 			if (responseCode == HttpURLConnection.HTTP_OK) {
-				result = this.readFullyAsString(conection.getInputStream());
+				String result = this.readFullyAsString(conection.getInputStream());
 				outputDir.mkdirs();
 				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
 				if (attachArtifact) addArtifactToMaven();
@@ -89,7 +90,7 @@ public class SpringDocMojo extends AbstractMojo {
 	private ByteArrayOutputStream readFully(InputStream inputStream) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
-		int length = 0;
+		int length;
 		while ((length = inputStream.read(buffer)) != -1) {
 			baos.write(buffer, 0, length);
 		}
@@ -98,6 +99,6 @@ public class SpringDocMojo extends AbstractMojo {
 
 	private void addArtifactToMaven() {
 		File swaggerFile = new File(outputDir.getAbsolutePath() + '/' + outputFileName);
-		projectHelper.attachArtifact(project, "json", "openapi", swaggerFile);
+		projectHelper.attachArtifact(project, outputFileType, "openapi", swaggerFile);
 	}
 }
