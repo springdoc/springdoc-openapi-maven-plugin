@@ -26,23 +26,35 @@ import org.apache.maven.project.MavenProjectHelper;
 @Mojo(name = "generate", requiresProject = true, defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresDependencyResolution = ResolutionScope.TEST, threadSafe = true)
 public class SpringDocMojo extends AbstractMojo {
 
-	@Parameter(defaultValue = "http://localhost:8080/v3/api-docs", property = "apiDocsUrl", required = true)
+	/**
+	 * The URL from where the api doc is retrieved.
+	 */
+	@Parameter(defaultValue = "http://localhost:8080/v3/api-docs", property = "springdoc.apiDocsUrl", required = true)
 	private String apiDocsUrl;
 
-	@Parameter(defaultValue = "openapi.json", property = "outputFileName", required = true)
+	/**
+	 * File name of the generated api doc.
+	 */
+	@Parameter(defaultValue = "openapi.json", property = "springdoc.outputFileName", required = true)
 	private String outputFileName;
 
-	@Parameter(defaultValue = "${project.build.directory}", property = "outputDir", required = true)
+	/**
+	 * Output directory for the generated api doc.
+	 */
+	@Parameter(defaultValue = "${project.build.directory}", property = "springdoc.outputDir", required = true)
 	private File outputDir;
 
-	@Parameter(defaultValue = "json", property = "outputFileType" , required = true)
+	/**
+	 * Output file type of the generated api doc (yaml or json).
+	 */
+	@Parameter(defaultValue = "json", property = "springdoc.outputFileType" , required = true)
 	private String outputFileType;
 
 	/**
 	 * Attach generated documentation as artifact to the Maven project.
 	 * If true documentation will be deployed along with other artifacts.
 	 */
-	@Parameter(defaultValue = "false", property = "attachArtifact")
+	@Parameter(defaultValue = "false", property = "springdoc.attachArtifact")
 	private boolean attachArtifact;
 
 	@Parameter(defaultValue = "${project}", readonly = true)
