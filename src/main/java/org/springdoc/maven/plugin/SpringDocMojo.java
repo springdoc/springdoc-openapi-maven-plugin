@@ -20,27 +20,41 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 
 /**
- * Goal which touches a timestamp file.
+ * Generate a openapi specification file.
  *
  */
-
 @Mojo(name = "generate", requiresProject = true, defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresDependencyResolution = ResolutionScope.TEST, threadSafe = true)
 public class SpringDocMojo extends AbstractMojo {
 
-	@Parameter(defaultValue = "http://localhost:8080/v3/api-docs", property = "apiDocsUrl", required = true)
+	/**
+	 * The URL from where the api doc is retrieved.
+	 */
+	@Parameter(defaultValue = "http://localhost:8080/v3/api-docs", property = "springdoc.apiDocsUrl", required = true)
 	private String apiDocsUrl;
 
-	@Parameter(defaultValue = "openapi.json", property = "outputFileName", required = true)
+	/**
+	 * File name of the generated api doc.
+	 */
+	@Parameter(defaultValue = "openapi.json", property = "springdoc.outputFileName", required = true)
 	private String outputFileName;
 
-	@Parameter(defaultValue = "${project.build.directory}", property = "outputDir", required = true)
+	/**
+	 * Output directory for the generated api doc.
+	 */
+	@Parameter(defaultValue = "${project.build.directory}", property = "springdoc.outputDir", required = true)
 	private File outputDir;
+
+	/**
+	 * Output file type of the generated api doc (yaml or json).
+	 */
+	@Parameter(defaultValue = "json", property = "springdoc.outputFileType" , required = true)
+	private String outputFileType;
 
 	/**
 	 * Attach generated documentation as artifact to the Maven project.
 	 * If true documentation will be deployed along with other artifacts.
 	 */
-	@Parameter(defaultValue = "false", property = "attachArtifact")
+	@Parameter(defaultValue = "false", property = "springdoc.attachArtifact")
 	private boolean attachArtifact;
 
 	@Parameter(defaultValue = "${project}", readonly = true)
@@ -49,7 +63,7 @@ public class SpringDocMojo extends AbstractMojo {
 	/**
 	 * Skip execution if set to true. Default is false.
 	 */
-	@Parameter(defaultValue = "false", property = "skip")
+	@Parameter(defaultValue = "false", property = "springdoc.skip")
 	private boolean skip;
 
 	@Component
@@ -67,9 +81,8 @@ public class SpringDocMojo extends AbstractMojo {
 			HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
 			conection.setRequestMethod(GET);
 			int responseCode = conection.getResponseCode();
-			String result = null;
 			if (responseCode == HttpURLConnection.HTTP_OK) {
-				result = this.readFullyAsString(conection.getInputStream());
+				String result = this.readFullyAsString(conection.getInputStream());
 				outputDir.mkdirs();
 				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
 				if (attachArtifact) addArtifactToMaven();
@@ -89,7 +102,7 @@ public class SpringDocMojo extends AbstractMojo {
 	private ByteArrayOutputStream readFully(InputStream inputStream) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
-		int length = 0;
+		int length;
 		while ((length = inputStream.read(buffer)) != -1) {
 			baos.write(buffer, 0, length);
 		}
@@ -98,6 +111,6 @@ public class SpringDocMojo extends AbstractMojo {
 
 	private void addArtifactToMaven() {
 		File swaggerFile = new File(outputDir.getAbsolutePath() + '/' + outputFileName);
-		projectHelper.attachArtifact(project, "json", "openapi", swaggerFile);
+		projectHelper.attachArtifact(project, outputFileType, "openapi", swaggerFile);
 	}
 }
