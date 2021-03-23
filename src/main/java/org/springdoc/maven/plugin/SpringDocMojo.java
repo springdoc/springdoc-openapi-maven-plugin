@@ -22,9 +22,25 @@ import org.apache.maven.project.MavenProjectHelper;
 /**
  * Generate a openapi specification file.
  *
+ * @author bnasslashen
  */
 @Mojo(name = "generate", requiresProject = true, defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresDependencyResolution = ResolutionScope.TEST, threadSafe = true)
 public class SpringDocMojo extends AbstractMojo {
+
+	/**
+	 * The DEFAULT OUTPUT FILE NAME.
+	 */
+	private static final String DEFAULT_OUTPUT_FILE_NAME= "openapi";
+
+	/**
+	 * The DEFAULT OUTPUT EXTENSION.
+	 */
+	private static final String DEFAULT_OUTPUT_EXTENSION= ".json";
+
+	/**
+	 * The DEFAULT OUTPUT FILE.
+	 */
+	private static final String DEFAULT_OUTPUT_FILE = DEFAULT_OUTPUT_FILE_NAME+DEFAULT_OUTPUT_EXTENSION;
 
 	/**
 	 * The URL from where the api doc is retrieved.
@@ -35,7 +51,7 @@ public class SpringDocMojo extends AbstractMojo {
 	/**
 	 * File name of the generated api doc.
 	 */
-	@Parameter(defaultValue = "openapi.json", property = "springdoc.outputFileName", required = true)
+	@Parameter(defaultValue = DEFAULT_OUTPUT_FILE, property = "springdoc.outputFileName", required = true)
 	private String outputFileName;
 
 	/**
@@ -45,18 +61,15 @@ public class SpringDocMojo extends AbstractMojo {
 	private File outputDir;
 
 	/**
-	 * Output file type of the generated api doc (yaml or json).
-	 */
-	@Parameter(defaultValue = "json", property = "springdoc.outputFileType" , required = true)
-	private String outputFileType;
-
-	/**
 	 * Attach generated documentation as artifact to the Maven project.
 	 * If true documentation will be deployed along with other artifacts.
 	 */
 	@Parameter(defaultValue = "false", property = "springdoc.attachArtifact")
 	private boolean attachArtifact;
 
+	/**
+	 * The Project.
+	 */
 	@Parameter(defaultValue = "${project}", readonly = true)
 	private MavenProject project;
 
@@ -66,9 +79,15 @@ public class SpringDocMojo extends AbstractMojo {
 	@Parameter(defaultValue = "false", property = "springdoc.skip")
 	private boolean skip;
 
+	/**
+	 * The Project helper.
+	 */
 	@Component
 	private MavenProjectHelper projectHelper;
 
+	/**
+	 * The constant GET.
+	 */
 	private static final String GET = "GET";
 
 	public void execute() {
@@ -95,10 +114,24 @@ public class SpringDocMojo extends AbstractMojo {
 	}
 
 
+	/**
+	 * Read fully as string string.
+	 *
+	 * @param inputStream the input stream
+	 * @return the string
+	 * @throws IOException the io exception
+	 */
 	private String readFullyAsString(InputStream inputStream) throws IOException {
 		return readFully(inputStream).toString(StandardCharsets.UTF_8.name());
 	}
 
+	/**
+	 * Read fully byte array output stream.
+	 *
+	 * @param inputStream the input stream
+	 * @return the byte array output stream
+	 * @throws IOException the io exception
+	 */
 	private ByteArrayOutputStream readFully(InputStream inputStream) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		byte[] buffer = new byte[1024];
@@ -109,8 +142,25 @@ public class SpringDocMojo extends AbstractMojo {
 		return baos;
 	}
 
+	/**
+	 * Add artifact to maven.
+	 */
 	private void addArtifactToMaven() {
 		File swaggerFile = new File(outputDir.getAbsolutePath() + '/' + outputFileName);
-		projectHelper.attachArtifact(project, outputFileType, "openapi", swaggerFile);
+		String extension = getFileExtension();
+		projectHelper.attachArtifact(project, extension, DEFAULT_OUTPUT_FILE_NAME, swaggerFile);
+	}
+
+	/**
+	 * Gets file extension.
+	 *
+	 * @return the file extension
+	 */
+	private String getFileExtension() {
+		String extension = DEFAULT_OUTPUT_EXTENSION;
+		int i = outputFileName.lastIndexOf('.');
+		if (i > 0)
+			extension = outputFileName.substring(i + 1);
+		return extension;
 	}
 }

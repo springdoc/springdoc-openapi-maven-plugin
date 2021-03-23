@@ -66,8 +66,6 @@ It possible to customise the following plugin properties:
     * The default value is: ${project.build.directory}
 *   outputFileName: The file name that contains the OpenAPI description.  
     * The default value is: openapi.json
-*   outputFileType: file type of the api doc (json or yaml)
-    * The default value is: json
 *   skip: Skip execution if set to true.
     * The default value is: false
 
