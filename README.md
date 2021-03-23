@@ -9,53 +9,57 @@ The plugin works in conjunction with spring-boot-maven plugin.
 
 You can test it during the integration tests phase using the maven command:
 
-```properties
+```shell
 mvn verify
 ```
 
 In order to use this functionality, you need to add the plugin declaration on the plugins section of your pom.xml:
 
 ```xml
-<plugin>
- <groupId>org.springframework.boot</groupId>
- <artifactId>spring-boot-maven-plugin</artifactId>
- <version>2.3.4.RELEASE</version>
- <configuration>
-    <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
- </configuration>
- <executions>
-  <execution>
-   <id>pre-integration-test</id>
-   <goals>
-    <goal>start</goal>
-   </goals>
-  </execution>
-  <execution>
-   <id>post-integration-test</id>
-   <goals>
-    <goal>stop</goal>
-   </goals>
-  </execution>
- </executions>
-</plugin>
-<plugin>
- <groupId>org.springdoc</groupId>
- <artifactId>springdoc-openapi-maven-plugin</artifactId>
- <version>1.1</version>
- <executions>
-  <execution>
-   <id>integration-test</id>
-   <goals>
-    <goal>generate</goal>
-   </goals>
-  </execution>
- </executions>
-</plugin>
+<plugins>
+  <plugin>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-maven-plugin</artifactId>
+   <version>2.3.4.RELEASE</version>
+   <configuration>
+      <jvmArguments>-Dspring.application.admin.enabled=true</jvmArguments>
+   </configuration>
+   <executions>
+    <execution>
+     <id>pre-integration-test</id>
+     <goals>
+      <goal>start</goal>
+     </goals>
+    </execution>
+    <execution>
+     <id>post-integration-test</id>
+     <goals>
+      <goal>stop</goal>
+     </goals>
+    </execution>
+   </executions>
+  </plugin>
+  <plugin>
+   <groupId>org.springdoc</groupId>
+   <artifactId>springdoc-openapi-maven-plugin</artifactId>
+   <version>1.1</version>
+   <executions>
+    <execution>
+     <id>integration-test</id>
+     <goals>
+      <goal>generate</goal>
+     </goals>
+    </execution>
+   </executions>
+  </plugin>
+</plugins>
 ```
 			
 ## **Custom settings of the springdoc-openapi-maven-plugin**
 
 It possible to customise the following plugin properties:
+*   attachArtifact: install / deploy the api doc to the repository
+    * The default value is: false
 *   apiDocsUrl: The local url of your (json or yaml). 
     * The default value is: http://localhost:8080/v3/api-docs
 *  outputDir: The output directory, where to generate the OpenAPI description.
