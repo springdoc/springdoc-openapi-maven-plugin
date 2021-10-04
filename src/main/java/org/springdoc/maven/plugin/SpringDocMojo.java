@@ -105,11 +105,7 @@ public class SpringDocMojo extends AbstractMojo {
 		try {
 			URL urlForGetRequest = new URL(apiDocsUrl);
 			HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-
-			if (headers.size() > 0) {
-				headers.forEach((k, v) -> conection.setRequestProperty(k, v));
-			}
-
+			if (headers.size() > 0) {headers.forEach((k, v) -> conection.setRequestProperty(k, v));}
 			conection.setRequestMethod(GET);
 			int responseCode = conection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {
