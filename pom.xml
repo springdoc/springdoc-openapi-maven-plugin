@@ -51,7 +51,7 @@
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<nexus-staging-maven-plugin>1.6.8</nexus-staging-maven-plugin>
 		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
-		<spring-boot.version>2.0.9.RELEASE</spring-boot.version>
+		<spring-boot.version>2.6.3</spring-boot.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 	</properties>
 
