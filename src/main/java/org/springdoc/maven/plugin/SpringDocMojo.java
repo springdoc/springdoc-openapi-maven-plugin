@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Component;
@@ -80,6 +81,12 @@ public class SpringDocMojo extends AbstractMojo {
 	private boolean skip;
 
 	/**
+	 * Headers to send in request
+	 */
+	@Parameter(property = "headers")
+	private Map<String, String> headers;
+
+	/**
 	 * The Project helper.
 	 */
 	@Component
@@ -98,6 +105,7 @@ public class SpringDocMojo extends AbstractMojo {
 		try {
 			URL urlForGetRequest = new URL(apiDocsUrl);
 			HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
+			if (headers.size() > 0) {headers.forEach((k, v) -> conection.setRequestProperty(k, v));}
 			conection.setRequestMethod(GET);
 			int responseCode = conection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {

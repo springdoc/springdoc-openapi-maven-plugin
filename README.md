@@ -68,6 +68,8 @@ It possible to customise the following plugin properties:
     * The default value is: openapi.json
 *   skip: Skip execution if set to true.
     * The default value is: false
+*   headers: List of headers to send in request
+    * The default value is empty
 
 ```xml
 <plugin>
@@ -87,6 +89,10 @@ It possible to customise the following plugin properties:
   <outputFileName>openapi.json</outputFileName>
   <outputDir>/home/springdoc/maven-output</outputDir>
   <skip>false</skip>
+  <headers>
+    <header1key>header1value</header1key>
+    <header2key>header2value</header2key>
+  </headers>
  </configuration>
 </plugin>
 ```
