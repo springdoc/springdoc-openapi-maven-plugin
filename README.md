@@ -101,4 +101,4 @@ It possible to customise the following plugin properties:
 
 * Thanks a lot [JetBrains](https://www.jetbrains.com/?from=springdoc-openapi) for supporting springdoc-openapi project.
 
-![JenBrains logo](![image](https://user-images.githubusercontent.com/13404829/159185161-e9c79a14-4f39-46b2-94f5-1cc59f88ae4b.png))
+![JenBrains logo](https://springdoc.org/images/jetbrains.svg)
