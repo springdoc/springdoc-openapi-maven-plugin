@@ -3,7 +3,7 @@
 
 ## **Introduction to springdoc-openapi-maven-plugin**
 
-The aim of springdoc-openapi-maven-plugin is to generate json and yaml OpenAPI description  during build time. 
+The aim of springdoc-openapi-maven-plugin is to generate json and yaml OpenAPI description during runtime. If you want to get swagger definitions properly, the application should completely running as locally.
 The plugin works during integration-tests phase, and generate the OpenAPI description. 
 The plugin works in conjunction with spring-boot-maven plugin. 
 
