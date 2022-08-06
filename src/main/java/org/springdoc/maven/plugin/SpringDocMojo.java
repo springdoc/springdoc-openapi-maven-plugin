@@ -104,20 +104,20 @@ public class SpringDocMojo extends AbstractMojo {
 		}
 		try {
 			URL urlForGetRequest = new URL(apiDocsUrl);
-			HttpURLConnection conection = (HttpURLConnection) urlForGetRequest.openConnection();
-			if (headers.size() > 0) {headers.forEach((k, v) -> conection.setRequestProperty(k, v));}
-			conection.setRequestMethod(GET);
-			int responseCode = conection.getResponseCode();
+			HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
+			if (headers.size() > 0) {headers.forEach((k, v) -> connection.setRequestProperty(k, v));}
+			connection.setRequestMethod(GET);
+			int responseCode = connection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {
-				String result = this.readFullyAsString(conection.getInputStream());
+				String result = this.readFullyAsString(connection.getInputStream());
 				outputDir.mkdirs();
 				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
 				if (attachArtifact) addArtifactToMaven();
 			} else {
-				getLog().error("An error has occured: Response code " + responseCode);
+				getLog().error("An error has occurred: Response code " + responseCode);
 			}
 		} catch (Exception e) {
-			getLog().error("An error has occured", e);
+			getLog().error("An error has occurred", e);
 		}
 	}
 
