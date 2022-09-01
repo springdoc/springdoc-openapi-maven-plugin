@@ -123,7 +123,7 @@ public class SpringDocMojo extends AbstractMojo {
 
 
 	/**
-	 * Read fully as string string.
+	 * Read fully as string.
 	 *
 	 * @param inputStream the input stream
 	 * @return the string
