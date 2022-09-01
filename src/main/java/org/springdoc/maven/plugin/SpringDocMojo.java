@@ -119,7 +119,7 @@ public class SpringDocMojo extends AbstractMojo {
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				String result = this.readFullyAsString(connection.getInputStream());
 
-				if (format) {
+				if (format && outputFileName.endsWith(DEFAULT_OUTPUT_EXTENSION)) {
 					JSONObject object = new JSONObject(new JSONTokener(result));
 					result = object.toString(2);
 				}
