@@ -81,6 +81,12 @@ public class SpringDocMojo extends AbstractMojo {
 	private boolean skip;
 
 	/**
+	 * Formats the openapi.json file if set to true. Default is false.
+	 */
+	@Parameter(defaultValue = "false", property = "springdoc.format")
+	private boolean format;
+
+	/**
 	 * Headers to send in request
 	 */
 	@Parameter(property = "headers")
