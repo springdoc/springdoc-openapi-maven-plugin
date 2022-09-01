@@ -19,6 +19,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  * Generate a openapi specification file.
@@ -116,6 +118,12 @@ public class SpringDocMojo extends AbstractMojo {
 			int responseCode = connection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				String result = this.readFullyAsString(connection.getInputStream());
+
+				if (format) {
+					JSONObject object = new JSONObject(new JSONTokener(result));
+					result = object.toString(2);
+				}
+
 				outputDir.mkdirs();
 				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
 				if (attachArtifact) addArtifactToMaven();
