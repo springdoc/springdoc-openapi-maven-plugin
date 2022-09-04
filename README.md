@@ -73,27 +73,36 @@ It possible to customise the following plugin properties:
 
 ```xml
 <plugin>
- <groupId>org.springdoc</groupId>
- <artifactId>springdoc-openapi-maven-plugin</artifactId>
- <version>1.1</version>
- <executions>
-  <execution>
-   <id>integration-test</id>
-   <goals>
-    <goal>generate</goal>
-   </goals>
-  </execution>
- </executions>
- <configuration>
-  <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
-  <outputFileName>openapi.json</outputFileName>
-  <outputDir>/home/springdoc/maven-output</outputDir>
-  <skip>false</skip>
-  <headers>
-    <header1key>header1value</header1key>
-    <header2key>header2value</header2key>
-  </headers>
- </configuration>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-maven-plugin</artifactId>
+    <version>2.0</version>
+    <executions>
+        <execution>
+            <id>integration-test</id>
+            <goals>
+                <goal>generate</goal>
+            </goals>
+        </execution>
+    </executions>
+    <configuration>
+        <baseUrl>http://localhost:8080</baseUrl>
+        <exports>
+            <export>
+                <path>v3/api-docs</path>
+                <outputFileName>openapi.json</outputFileName>
+            </export>
+            <export>
+                <path>v3/api-docs.yaml</path>
+                <outputFileName>openapi.yaml</outputFileName>
+            </export>
+        </exports>
+        <outputDir>/home/springdoc/maven-output</outputDir>
+        <skip>false</skip>
+        <headers>
+            <header1key>header1value</header1key>
+            <header2key>header2value</header2key>
+        </headers>
+    </configuration>
 </plugin>
 ```
 

@@ -13,7 +13,6 @@ import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -77,12 +76,15 @@ public class SpringDocMojo extends AbstractMojo {
 
 	/**
 	 * All files, that should be exported from the documentation.
-	 *
+	 * <p>
 	 * These are individual exports. Allowing you to define as many
 	 * or as little files to be exported from the urls as you like
 	 */
 	@Parameter(property = "exports", required = true)
 	private List<ExportTarget> exports;
+
+	@Parameter(property = "baseUrl", defaultValue = "http://localhost:8080/", required = true)
+	private String baseUrl;
 
 	/**
 	 * The Project helper.
@@ -103,10 +105,9 @@ public class SpringDocMojo extends AbstractMojo {
 	}
 
 	private void doExecute(ExportTarget container) throws IllegalStateException {
-		String targetFile = outputDir.getAbsolutePath() + "/" + container.getOutputFileName();
-		getLog().info("Fetching " + container.getUrl() + " as " + targetFile);
-		HttpURLConnection connection = container.openConnection();
-
+		Path targetPath = container.accessOutputFileFrom(outputDir.getAbsolutePath());
+		HttpURLConnection connection = container.openConnection(baseUrl);
+		getLog().info("Fetching " + container.getPath() + " as " + targetPath);
 
 		if (headers.size() > 0) {
 			headers.forEach(connection::setRequestProperty);
@@ -121,14 +122,12 @@ public class SpringDocMojo extends AbstractMojo {
 
 		if (responseCode == HttpURLConnection.HTTP_OK) {
 			String result = this.readFullyAsString(connection);
-			Path targetPath = Paths.get(targetFile);
-			targetPath.toFile().getParentFile().mkdirs();
 			try {
 				Files.write(targetPath, result.getBytes(StandardCharsets.UTF_8));
 			} catch (IOException e) {
-				throw new IllegalStateException("Error writing " + targetFile, e);
+				throw new IllegalStateException("Error writing " + targetPath, e);
 			}
-			if (attachArtifact) addArtifactToMaven(targetFile);
+			if (attachArtifact) addArtifactToMaven(targetPath);
 		} else {
 			getLog().error("An error has occurred: Response code " + responseCode);
 		}
@@ -169,10 +168,9 @@ public class SpringDocMojo extends AbstractMojo {
 	/**
 	 * Add artifact to maven.
 	 */
-	private void addArtifactToMaven(String outputFileName) {
-		File swaggerFile = new File(outputDir.getAbsolutePath() + '/' + outputFileName);
-		String extension = getFileExtension(outputFileName);
-		projectHelper.attachArtifact(project, extension, DEFAULT_OUTPUT_FILE_NAME, swaggerFile);
+	private void addArtifactToMaven(Path outputFile) {
+		String extension = getFileExtension(outputFile.getFileName().toString());
+		projectHelper.attachArtifact(project, extension, DEFAULT_OUTPUT_FILE_NAME, outputFile.toFile());
 	}
 
 	/**
