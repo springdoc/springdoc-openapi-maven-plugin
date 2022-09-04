@@ -1,24 +1,21 @@
 package org.springdoc.maven.plugin;
 
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugins.annotations.*;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectHelper;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
-
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugins.annotations.Component;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.MavenProjectHelper;
 
 /**
  * Generate a openapi specification file.
@@ -31,29 +28,21 @@ public class SpringDocMojo extends AbstractMojo {
 	/**
 	 * The DEFAULT OUTPUT FILE NAME.
 	 */
-	private static final String DEFAULT_OUTPUT_FILE_NAME= "openapi";
+	private static final String DEFAULT_OUTPUT_FILE_NAME = "openapi";
 
 	/**
 	 * The DEFAULT OUTPUT EXTENSION.
 	 */
-	private static final String DEFAULT_OUTPUT_EXTENSION= ".json";
+	private static final String DEFAULT_OUTPUT_EXTENSION = ".json";
 
 	/**
 	 * The DEFAULT OUTPUT FILE.
 	 */
-	private static final String DEFAULT_OUTPUT_FILE = DEFAULT_OUTPUT_FILE_NAME+DEFAULT_OUTPUT_EXTENSION;
-
+	private static final String DEFAULT_OUTPUT_FILE = DEFAULT_OUTPUT_FILE_NAME + DEFAULT_OUTPUT_EXTENSION;
 	/**
-	 * The URL from where the api doc is retrieved.
+	 * The constant GET.
 	 */
-	@Parameter(defaultValue = "http://localhost:8080/v3/api-docs", property = "springdoc.apiDocsUrl", required = true)
-	private String apiDocsUrl;
-
-	/**
-	 * File name of the generated api doc.
-	 */
-	@Parameter(defaultValue = DEFAULT_OUTPUT_FILE, property = "springdoc.outputFileName", required = true)
-	private String outputFileName;
+	private static final String GET = "GET";
 
 	/**
 	 * Output directory for the generated api doc.
@@ -87,15 +76,19 @@ public class SpringDocMojo extends AbstractMojo {
 	private Map<String, String> headers;
 
 	/**
+	 * All files, that should be exported from the documentation.
+	 *
+	 * These are individual exports. Allowing you to define as many
+	 * or as little files to be exported from the urls as you like
+	 */
+	@Parameter(property = "exports", required = true)
+	private List<ExportTarget> exports;
+
+	/**
 	 * The Project helper.
 	 */
 	@Component
 	private MavenProjectHelper projectHelper;
-
-	/**
-	 * The constant GET.
-	 */
-	private static final String GET = "GET";
 
 	public void execute() {
 		if (skip) {
@@ -103,34 +96,57 @@ public class SpringDocMojo extends AbstractMojo {
 			return;
 		}
 		try {
-			URL urlForGetRequest = new URL(apiDocsUrl);
-			HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
-			if (headers.size() > 0) {headers.forEach((k, v) -> connection.setRequestProperty(k, v));}
-			connection.setRequestMethod(GET);
-			int responseCode = connection.getResponseCode();
-			if (responseCode == HttpURLConnection.HTTP_OK) {
-				String result = this.readFullyAsString(connection.getInputStream());
-				outputDir.mkdirs();
-				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
-				if (attachArtifact) addArtifactToMaven();
-			} else {
-				getLog().error("An error has occurred: Response code " + responseCode);
-			}
-		} catch (Exception e) {
-			getLog().error("An error has occurred", e);
+			exports.forEach(this::doExecute);
+		} catch (IllegalStateException e) {
+			getLog().error("An error has occurred: " + e.getMessage(), e.getCause());
 		}
 	}
 
+	private void doExecute(ExportTarget container) throws IllegalStateException {
+		String targetFile = outputDir.getAbsolutePath() + "/" + container.getOutputFileName();
+		getLog().info("Fetching " + container.getUrl() + " as " + targetFile);
+		HttpURLConnection connection = container.openConnection();
+
+
+		if (headers.size() > 0) {
+			headers.forEach(connection::setRequestProperty);
+		}
+		int responseCode;
+		try {
+			connection.setRequestMethod(GET);
+			responseCode = connection.getResponseCode();
+		} catch (IOException e) {
+			throw new IllegalStateException(e);
+		}
+
+		if (responseCode == HttpURLConnection.HTTP_OK) {
+			String result = this.readFullyAsString(connection);
+			Path targetPath = Paths.get(targetFile);
+			targetPath.toFile().getParentFile().mkdirs();
+			try {
+				Files.write(targetPath, result.getBytes(StandardCharsets.UTF_8));
+			} catch (IOException e) {
+				throw new IllegalStateException("Error writing " + targetFile, e);
+			}
+			if (attachArtifact) addArtifactToMaven(targetFile);
+		} else {
+			getLog().error("An error has occurred: Response code " + responseCode);
+		}
+	}
 
 	/**
-	 * Read fully as string string.
+	 * Read fully as string.
 	 *
-	 * @param inputStream the input stream
+	 * @param connection the input stream
 	 * @return the string
 	 * @throws IOException the io exception
 	 */
-	private String readFullyAsString(InputStream inputStream) throws IOException {
-		return readFully(inputStream).toString(StandardCharsets.UTF_8.name());
+	private String readFullyAsString(HttpURLConnection connection) {
+		try {
+			return readFully(connection.getInputStream()).toString(StandardCharsets.UTF_8.name());
+		} catch (IOException e) {
+			throw new IllegalStateException("Could not read from the connection", e);
+		}
 	}
 
 	/**
@@ -153,9 +169,9 @@ public class SpringDocMojo extends AbstractMojo {
 	/**
 	 * Add artifact to maven.
 	 */
-	private void addArtifactToMaven() {
+	private void addArtifactToMaven(String outputFileName) {
 		File swaggerFile = new File(outputDir.getAbsolutePath() + '/' + outputFileName);
-		String extension = getFileExtension();
+		String extension = getFileExtension(outputFileName);
 		projectHelper.attachArtifact(project, extension, DEFAULT_OUTPUT_FILE_NAME, swaggerFile);
 	}
 
@@ -164,7 +180,7 @@ public class SpringDocMojo extends AbstractMojo {
 	 *
 	 * @return the file extension
 	 */
-	private String getFileExtension() {
+	private String getFileExtension(String outputFileName) {
 		String extension = DEFAULT_OUTPUT_EXTENSION;
 		int i = outputFileName.lastIndexOf('.');
 		if (i > 0)

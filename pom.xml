@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springdoc</groupId>
 	<artifactId>springdoc-openapi-maven-plugin</artifactId>
-	<version>1.5-SNAPSHOT</version>
+	<version>1.6</version>
 	<packaging>maven-plugin</packaging>
 	<name>springdoc-openapi-maven-plugin</name>
 	<description>springdoc OpenAPI 3 maven plugin</description>
