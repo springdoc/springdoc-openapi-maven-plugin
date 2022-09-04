@@ -35,10 +35,6 @@ public class SpringDocMojo extends AbstractMojo {
 	private static final String DEFAULT_OUTPUT_EXTENSION = ".json";
 
 	/**
-	 * The DEFAULT OUTPUT FILE.
-	 */
-	private static final String DEFAULT_OUTPUT_FILE = DEFAULT_OUTPUT_FILE_NAME + DEFAULT_OUTPUT_EXTENSION;
-	/**
 	 * The constant GET.
 	 */
 	private static final String GET = "GET";
@@ -83,6 +79,11 @@ public class SpringDocMojo extends AbstractMojo {
 	@Parameter(property = "exports", required = true)
 	private List<ExportTarget> exports;
 
+	/**
+	 * The base url, which all exports are relative to.
+	 * <p>
+	 * By default, it will be local host on port 8080, because this is the default value of spring.
+	 */
 	@Parameter(property = "baseUrl", defaultValue = "http://localhost:8080/", required = true)
 	private String baseUrl;
 
