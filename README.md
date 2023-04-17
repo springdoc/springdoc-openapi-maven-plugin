@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/springdoc/springdoc-openapi-maven-plugin.svg?branch=master)](https://travis-ci.org/springdoc/springdoc-openapi-maven-plugin)
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=springdoc_springdoc-openapi-maven-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=springdoc_springdoc-openapi-maven-plugin)
+[![Build Status](http://129.159.254.115:8686/buildStatus/icon?job=springdoc-openapi-maven-plugin-release)](http://129.159.254.115:8686/view/springdoc-openapi/job/springdoc-openapi-maven-plugin-release/)
 
 ## **Introduction to springdoc-openapi-maven-plugin**
 
