@@ -1,4 +1,4 @@
-[![Build Status](http://129.159.254.115:8686/buildStatus/icon?job=springdoc-openapi-maven-plugin-release)](http://129.159.254.115:8686/view/springdoc-openapi/job/springdoc-openapi-maven-plugin-release/)
+[![Build Status](https://ci-cd.springdoc.org:8443/buildStatus/icon?job=springdoc-openapi-maven-plugin-release)](https://ci-cd.springdoc.org:8443/view/springdoc-openapi/job/springdoc-openapi-maven-plugin-release/)
 
 ## **Introduction to springdoc-openapi-maven-plugin**
 
