@@ -104,7 +104,7 @@ public class SpringDocMojo extends AbstractMojo {
 	 */
 	private static final String GET = "GET";
 
-	public void execute() {
+	public void execute() throws MojoFailureException {
 		if (skip) {
 			getLog().info("Skip execution as per configuration");
 			return;
@@ -121,7 +121,7 @@ public class SpringDocMojo extends AbstractMojo {
 				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
 				if (attachArtifact) addArtifactToMaven();
 			} else {
-				String message = "An error has occurred: Response code " + responseCode;
+				String message = "An error has occurred, response code: " + responseCode;
 				if(failOnError) {
 					throw new MojoFailureException(message);
 				} else {
@@ -130,6 +130,9 @@ public class SpringDocMojo extends AbstractMojo {
 			}
 		} catch (Exception e) {
 			getLog().error("An error has occurred", e);
+			if(failOnError) {
+				throw new MojoFailureException("An error has occurred: " + e.getMessage());
+			}
 		}
 	}
 
