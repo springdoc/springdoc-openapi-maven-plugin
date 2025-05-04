@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springdoc</groupId>
 	<artifactId>springdoc-openapi-maven-plugin</artifactId>
@@ -20,14 +22,18 @@
 			<name>Badr NASS LAHSEN</name>
 			<email>support@springdoc.org</email>
 			<organization>springdoc</organization>
-			<organizationUrl>https://springdoc.github.io/springdoc-openapi/</organizationUrl>
+			<organizationUrl>https://springdoc.github.io/springdoc-openapi/
+			</organizationUrl>
 		</developer>
 	</developers>
 
 	<scm>
 		<url>git@github.com:springdoc/springdoc-openapi-maven-plugin.git</url>
-		<connection>scm:git:git@github.com:springdoc/springdoc-openapi-maven-plugin.git</connection>
-		<developerConnection>scm:git:git@github.com:springdoc/springdoc-openapi-maven-plugin.git</developerConnection>
+		<connection>scm:git:git@github.com:springdoc/springdoc-openapi-maven-plugin.git
+		</connection>
+		<developerConnection>
+			scm:git:git@github.com:springdoc/springdoc-openapi-maven-plugin.git
+		</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
 	<distributionManagement>
@@ -49,7 +55,8 @@
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-		<nexus-staging-maven-plugin>1.6.8</nexus-staging-maven-plugin>
+		<central-publishing-maven-plugin.version>0.7.0
+		</central-publishing-maven-plugin.version>
 		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 	</properties>
@@ -146,14 +153,14 @@
 						</executions>
 					</plugin>
 					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>${nexus-staging-maven-plugin}</version>
+						<groupId>org.sonatype.central</groupId>
+						<artifactId>central-publishing-maven-plugin</artifactId>
+						<version>${central-publishing-maven-plugin.version}</version>
 						<extensions>true</extensions>
 						<configuration>
-							<serverId>ossrh</serverId>
-							<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+							<publishingServerId>central</publishingServerId>
+							<autoPublish>true</autoPublish>
+							<waitUntil>published</waitUntil>
 						</configuration>
 					</plugin>
 					<plugin>
