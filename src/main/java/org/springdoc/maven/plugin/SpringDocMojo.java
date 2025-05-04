@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -81,6 +82,12 @@ public class SpringDocMojo extends AbstractMojo {
 	private boolean skip;
 
 	/**
+	 * Fail build on error, if set to true. Default is false.
+	 */
+	@Parameter(defaultValue = "false", property = "springdoc.failOnError")
+	private boolean failOnError;
+
+	/**
 	 * Headers to send in request
 	 */
 	@Parameter(property = "headers")
@@ -97,7 +104,7 @@ public class SpringDocMojo extends AbstractMojo {
 	 */
 	private static final String GET = "GET";
 
-	public void execute() {
+	public void execute() throws MojoFailureException {
 		if (skip) {
 			getLog().info("Skip execution as per configuration");
 			return;
@@ -114,10 +121,18 @@ public class SpringDocMojo extends AbstractMojo {
 				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
 				if (attachArtifact) addArtifactToMaven();
 			} else {
-				getLog().error("An error has occurred: Response code " + responseCode);
+				String message = "An error has occurred, response code: " + responseCode;
+				if(failOnError) {
+					throw new MojoFailureException(message);
+				} else {
+					getLog().error(message);
+				}
 			}
 		} catch (Exception e) {
 			getLog().error("An error has occurred", e);
+			if(failOnError) {
+				throw new MojoFailureException("An error has occurred: " + e.getMessage());
+			}
 		}
 	}
 
