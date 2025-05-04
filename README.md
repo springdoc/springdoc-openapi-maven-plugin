@@ -1,5 +1,4 @@
-[![Build Status](https://ci-cd.springdoc.org:8443/buildStatus/icon?job=springdoc-openapi-maven-plugin-release)](https://ci-cd.springdoc.org:8443/view/springdoc-openapi/job/springdoc-openapi-maven-plugin-release/)
-
+[![Build Status](https://ci-cd.springdoc.org:8443/view/springdoc-openapi-maven/job/springdoc-openapi-maven-plugin-IC/badge/icon)](https://ci-cd.springdoc.org:8443/view/springdoc-openapi-maven/job/springdoc-openapi-maven-plugin-IC/)
 ## **Introduction to springdoc-openapi-maven-plugin**
 
 The aim of springdoc-openapi-maven-plugin is to generate json and yaml OpenAPI description during runtime. If you want to get swagger definitions properly, the application should completely running as locally.
