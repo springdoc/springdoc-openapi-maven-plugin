@@ -71,6 +71,8 @@ It possible to customise the following plugin properties:
     * The default value is empty
 *   failOnError: Fail build on error, if set to `true`. Default is `false`.
     * The default value is false
+*   prettyPrint: Pretty print output json file contents, if set to `true`. Default is `false`.
+    * The default value is false, retaining v1.5 behavior
 
 ```xml
 <plugin>

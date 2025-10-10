@@ -1,9 +1,6 @@
 package org.springdoc.maven.plugin;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -11,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
@@ -87,6 +86,12 @@ public class SpringDocMojo extends AbstractMojo {
 	@Parameter(defaultValue = "false", property = "springdoc.failOnError")
 	private boolean failOnError;
 
+    /**
+     * Pretty Print json output file contents. Default is false
+     */
+    @Parameter(defaultValue = "false", property = "springdoc.prettyPrint")
+    private boolean prettyPrint;
+
 	/**
 	 * Headers to send in request
 	 */
@@ -118,7 +123,16 @@ public class SpringDocMojo extends AbstractMojo {
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				String result = this.readFullyAsString(connection.getInputStream());
 				outputDir.mkdirs();
-				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
+                if(prettyPrint) {
+                    try (FileWriter writer = new FileWriter(outputDir.getAbsolutePath() + "/" + outputFileName)) {
+                        new GsonBuilder().setPrettyPrinting().create().toJson(new Gson().fromJson(result, Object.class), writer);
+                        getLog().info("JSON written to output.json");
+                    } catch (IOException e) {
+                        throw new MojoFailureException(e.getMessage());
+                    }
+                }else {
+                    Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
+                }
 				if (attachArtifact) addArtifactToMaven();
 			} else {
 				String message = "An error has occurred, response code: " + responseCode;
