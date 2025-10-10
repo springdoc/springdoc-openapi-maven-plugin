@@ -1,6 +1,10 @@
 package org.springdoc.maven.plugin;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -126,11 +130,11 @@ public class SpringDocMojo extends AbstractMojo {
                 if(prettyPrint) {
                     try (FileWriter writer = new FileWriter(outputDir.getAbsolutePath() + "/" + outputFileName)) {
                         new GsonBuilder().setPrettyPrinting().create().toJson(new Gson().fromJson(result, Object.class), writer);
-                        getLog().info("JSON written to output.json");
+                        getLog().info("JSON written to " + outputFileName);
                     } catch (IOException e) {
                         throw new MojoFailureException(e.getMessage());
                     }
-                }else {
+                } else {
                     Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
                 }
 				if (attachArtifact) addArtifactToMaven();
