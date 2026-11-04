@@ -11,7 +11,6 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectHelper;
 
@@ -20,7 +19,7 @@ import org.apache.maven.project.MavenProjectHelper;
  *
  * @author bnasslashen
  */
-@Mojo(name = "generate", requiresProject = true, defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresDependencyResolution = ResolutionScope.TEST, threadSafe = true)
+@Mojo(name = "generate", defaultPhase = LifecyclePhase.INTEGRATION_TEST, threadSafe = true)
 public class SpringDocMojo extends AbstractMojo {
 
 	/**
