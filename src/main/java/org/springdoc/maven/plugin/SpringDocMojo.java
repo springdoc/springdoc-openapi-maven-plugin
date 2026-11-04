@@ -1,14 +1,8 @@
 package org.springdoc.maven.plugin;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -94,84 +88,50 @@ public class SpringDocMojo extends AbstractMojo {
 	private Map<String, String> headers;
 
 	/**
+	 * Connect and read timeout of the request, in seconds. 0 means no timeout.
+	 */
+	@Parameter(defaultValue = "60", property = "springdoc.timeout")
+	private int timeout;
+
+	/**
 	 * The Project helper.
 	 */
 	@Component
 	private MavenProjectHelper projectHelper;
-
-	/**
-	 * The constant GET.
-	 */
-	private static final String GET = "GET";
 
 	public void execute() throws MojoFailureException {
 		if (skip) {
 			getLog().info("Skip execution as per configuration");
 			return;
 		}
+		File outputFile = new File(outputDir, outputFileName);
 		try {
-			URL urlForGetRequest = new URL(apiDocsUrl);
-			HttpURLConnection connection = (HttpURLConnection) urlForGetRequest.openConnection();
-			if (headers.size() > 0) {headers.forEach((k, v) -> connection.setRequestProperty(k, v));}
-			connection.setRequestMethod(GET);
-			int responseCode = connection.getResponseCode();
-			if (responseCode == HttpURLConnection.HTTP_OK) {
-				String result = this.readFullyAsString(connection.getInputStream());
-				outputDir.mkdirs();
-				Files.write(Paths.get(outputDir.getAbsolutePath() + "/" + outputFileName), result.getBytes(StandardCharsets.UTF_8));
-				if (attachArtifact) addArtifactToMaven();
-			} else {
-				String message = "An error has occurred, response code: " + responseCode;
-				if(failOnError) {
-					throw new MojoFailureException(message);
-				} else {
-					getLog().error(message);
-				}
-			}
-		} catch (Exception e) {
-			getLog().error("An error has occurred", e);
-			if(failOnError) {
-				throw new MojoFailureException("An error has occurred: " + e.getMessage());
-			}
+			String result = ApiDocsClient.fetch(apiDocsUrl, headers, timeout);
+			Files.createDirectories(outputDir.toPath());
+			Files.write(outputFile.toPath(), result.getBytes(StandardCharsets.UTF_8));
 		}
-	}
-
-
-	/**
-	 * Read fully as string string.
-	 *
-	 * @param inputStream the input stream
-	 * @return the string
-	 * @throws IOException the io exception
-	 */
-	private String readFullyAsString(InputStream inputStream) throws IOException {
-		return readFully(inputStream).toString(StandardCharsets.UTF_8.name());
-	}
-
-	/**
-	 * Read fully byte array output stream.
-	 *
-	 * @param inputStream the input stream
-	 * @return the byte array output stream
-	 * @throws IOException the io exception
-	 */
-	private ByteArrayOutputStream readFully(InputStream inputStream) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		byte[] buffer = new byte[1024];
-		int length;
-		while ((length = inputStream.read(buffer)) != -1) {
-			baos.write(buffer, 0, length);
+		catch (Exception e) {
+			String message = "Unable to generate the OpenAPI description from " + apiDocsUrl + ": " + e.getMessage();
+			if (failOnError) {
+				throw new MojoFailureException(message, e);
+			}
+			getLog().error(message);
+			getLog().debug(e);
+			return;
 		}
-		return baos;
+		if (attachArtifact) {
+			addArtifactToMaven(outputFile);
+		}
 	}
 
 	/**
 	 * Add artifact to maven.
+	 *
+	 * @param outputFile the generated file
 	 */
-	private void addArtifactToMaven() {
-		File swaggerFile = new File(outputDir.getAbsolutePath() + '/' + outputFileName);
+	private void addArtifactToMaven(File outputFile) {
 		String extension = getFileExtension();
-		projectHelper.attachArtifact(project, extension, DEFAULT_OUTPUT_FILE_NAME, swaggerFile);
+		projectHelper.attachArtifact(project, extension, DEFAULT_OUTPUT_FILE_NAME, outputFile);
 	}
 
 	/**

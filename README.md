@@ -140,6 +140,7 @@ example `mvn verify -Dspringdoc.skip=true`.
 | `outputDir` | `springdoc.outputDir` | `${project.build.directory}` | Directory of the generated file |
 | `attachArtifact` | `springdoc.attachArtifact` | `false` | Attach the file to the project, so it is installed and deployed with the other artifacts (classifier `openapi`) |
 | `headers` | | none | HTTP headers sent with the request, for example for authentication |
+| `timeout` | `springdoc.timeout` | `60` | Connect and read timeout of the request, in seconds (`0` for none) |
 | `skip` | `springdoc.skip` | `false` | Skip the execution |
 | `failOnError` | `springdoc.failOnError` | `false` | Fail the build if the description cannot be downloaded or written |
 
@@ -234,6 +235,7 @@ mvn verify site
 | `apiDocsFile` | `springdoc.apiDocsFile` | `${project.build.directory}/openapi.json` | File written by the `generate` goal |
 | `apiDocsUrl` | `springdoc.apiDocsUrl` | `http://localhost:8080/v3/api-docs` | URL used when `apiDocsFile` does not exist |
 | `headers` | | none | HTTP headers sent with the request to `apiDocsUrl` |
+| `timeout` | `springdoc.timeout` | `60` | Connect and read timeout of the request to `apiDocsUrl`, in seconds |
 | `siteReportName` | `springdoc.report.name` | `OpenAPI Documentation` | Name in the Project Reports menu |
 | `siteReportDescription` | `springdoc.report.description` | `OpenAPI specification rendered with Swagger UI` | Description in the Project Reports page |
 | `siteReportDirectory` | `springdoc.report.directory` | `springdoc-openapi` | Directory of the page in the site |

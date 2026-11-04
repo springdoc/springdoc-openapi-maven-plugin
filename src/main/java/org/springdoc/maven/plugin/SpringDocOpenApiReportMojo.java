@@ -6,12 +6,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.reporting.AbstractMavenReport;
 import org.apache.maven.reporting.MavenReportException;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Locale;
@@ -50,8 +46,6 @@ import java.util.Map;
 @Mojo(name = "report", defaultPhase = LifecyclePhase.SITE, threadSafe = true)
 public class SpringDocOpenApiReportMojo extends AbstractMavenReport {
 
-	private static final String GET = "GET";
-
 	/**
 	 * Skip report generation.
 	 */
@@ -78,6 +72,12 @@ public class SpringDocOpenApiReportMojo extends AbstractMavenReport {
 	 */
 	@Parameter(property = "headers")
 	private Map<String, String> headers;
+
+	/**
+	 * Connect and read timeout of the request to {@code apiDocsUrl}, in seconds. 0 means no timeout.
+	 */
+	@Parameter(defaultValue = "60", property = "springdoc.timeout")
+	private int timeout;
 
 	/**
 	 * Name shown in the site's Project Reports navigation.
@@ -175,39 +175,13 @@ public class SpringDocOpenApiReportMojo extends AbstractMavenReport {
 		getLog().info("Spec file not found at " + apiDocsFile
 				+ ", fetching from " + apiDocsUrl);
 		try {
-			return fetchFromUrl();
+			return ApiDocsClient.fetch(apiDocsUrl, headers, timeout);
 		} catch (IOException e) {
 			throw new MavenReportException(
 					"Could not load OpenAPI spec from file (" + apiDocsFile
 							+ ") or URL (" + apiDocsUrl + "). "
 							+ "Run the 'generate' goal first or ensure the application is running.",
 					e);
-		}
-	}
-
-	private String fetchFromUrl() throws IOException {
-		URL url = new URL(apiDocsUrl);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		if (headers != null && !headers.isEmpty()) {
-			for (Map.Entry<String, String> entry : headers.entrySet()) {
-				connection.setRequestProperty(entry.getKey(), entry.getValue());
-			}
-		}
-		connection.setRequestMethod(GET);
-
-		int responseCode = connection.getResponseCode();
-		if (responseCode != HttpURLConnection.HTTP_OK) {
-			throw new IOException("HTTP " + responseCode + " from " + apiDocsUrl);
-		}
-
-		try (InputStream is = connection.getInputStream()) {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			byte[] buffer = new byte[4096];
-			int len;
-			while ((len = is.read(buffer)) != -1) {
-				baos.write(buffer, 0, len);
-			}
-			return baos.toString(StandardCharsets.UTF_8.name());
 		}
 	}
 
