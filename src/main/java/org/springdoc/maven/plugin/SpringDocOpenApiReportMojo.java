@@ -101,9 +101,9 @@ public class SpringDocOpenApiReportMojo extends AbstractMavenReport {
 
 	/**
 	 * Swagger UI version tag used for CDN references (unpkg.com).
-	 * Examples: {@code "5"} (latest 5.x), {@code "5.18.2"} (pinned).
+	 * Pinned by default for reproducible sites; {@code "5"} (latest 5.x) is also accepted.
 	 */
-	@Parameter(property = "springdoc.swaggerUiVersion", defaultValue = "5")
+	@Parameter(property = "springdoc.swaggerUiVersion", defaultValue = "5.34.1")
 	private String swaggerUiVersion;
 
 	@Override
@@ -136,6 +136,12 @@ public class SpringDocOpenApiReportMojo extends AbstractMavenReport {
 		getLog().info("Generating OpenAPI site report");
 
 		String specJson = loadSpecJson();
+		// The spec is inlined as a JavaScript object literal, so only JSON is supported
+		if (!specJson.trim().startsWith("{")) {
+			throw new MavenReportException(
+					"The OpenAPI spec is not JSON (YAML is not supported by the report goal). "
+							+ "Point 'apiDocsFile' or 'apiDocsUrl' to a JSON spec, e.g. /v3/api-docs.");
+		}
 
 		File reportOutputDir = new File(
 				getReportOutputDirectory(), siteReportDirectory);

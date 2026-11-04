@@ -107,6 +107,8 @@ The report reads the OpenAPI spec from the file produced by the `generate` goal 
 
 **Recommended workflow:** run `mvn verify` first (to generate the spec), then `mvn site`.
 
+The report only supports a JSON spec (`/v3/api-docs`), not YAML.
+
 Add the plugin to the `<reporting>` section of your POM:
 
 ```xml
@@ -138,7 +140,7 @@ Add the plugin to the `<reporting>` section of your POM:
 | `springdoc.report.name` | `OpenAPI Documentation` | Name in Project Reports navigation |
 | `springdoc.report.description` | `OpenAPI specification rendered with Swagger UI` | Description in Project Reports |
 | `springdoc.report.directory` | `springdoc-openapi` | Subdirectory under the site output |
-| `springdoc.swaggerUiVersion` | `5` | Swagger UI version for CDN (unpkg.com) |
+| `springdoc.swaggerUiVersion` | `5.34.1` | Swagger UI version for CDN (unpkg.com) |
 
 ### Example with custom configuration
 
