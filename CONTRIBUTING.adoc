@@ -7,7 +7,7 @@ something, or simply want to hack on the code this document should help you get 
 
 
 == Code of Conduct
-This project adheres to the Contributor Covenant link:https://www.contributor-covenant.org/version/3/0/code_of_conduct/[code of
+This project adheres to the Contributor Covenant link:https://github.com/springdoc/springdoc-openapi/blob/main/CODE_OF_CONDUCT.md[code of
 conduct]. By participating, you are expected to uphold this code. 
 
 
