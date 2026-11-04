@@ -117,7 +117,7 @@ The plugin only calls an HTTP endpoint, so it works with any application that se
 | 🍃 3.x | 2.x |
 | 🍂 2.x and 1.x | 1.x |
 
-The plugin runs on Java 8 and later.
+The plugin runs on Java 8 and later, with Maven 3.6.3 and later.
 
 ## 🎯 Goals
 
@@ -245,6 +245,9 @@ mvn verify site
 | `skip` | `springdoc.report.skip` | `false` | Skip the report |
 
 > [!IMPORTANT]
+> The report needs `maven-site-plugin` 3.9.1 or later. Maven 3.9 uses 3.12.1 by default; with an older Maven,
+> set the version of `maven-site-plugin` in your `pom.xml`.
+>
 > The report only supports a JSON description (`/v3/api-docs`), not YAML. The Swagger UI files are loaded from
 > unpkg.com, so the page needs internet access when it is viewed.
 

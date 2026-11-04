@@ -5,9 +5,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -102,9 +103,19 @@ public class SpringDocMojo extends AbstractMojo {
 	/**
 	 * The Project helper.
 	 */
-	@Component
-	private MavenProjectHelper projectHelper;
+	private final MavenProjectHelper projectHelper;
 
+	/**
+	 * Instantiates a new Spring doc mojo.
+	 *
+	 * @param projectHelper the project helper
+	 */
+	@Inject
+	public SpringDocMojo(MavenProjectHelper projectHelper) {
+		this.projectHelper = projectHelper;
+	}
+
+	@Override
 	public void execute() throws MojoFailureException {
 		if (skip) {
 			getLog().info("Skip execution as per configuration");
