@@ -173,6 +173,9 @@ example `mvn verify -Dspringdoc.skip=true`.
 
 > [!TIP]
 > Set `failOnError` to `true` on CI. By default, a failure is only logged, and the build goes on without the file.
+>
+> When the build fails, Maven skips `spring-boot:stop`, so the application keeps running. Stop it before the next
+> build, or it answers the next build's requests instead of the new application.
 
 ### 💡 Recipes
 
