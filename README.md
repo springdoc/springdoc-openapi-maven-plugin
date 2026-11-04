@@ -1,4 +1,4 @@
-[![Build Status](https://ci-cd.springdoc.org:8443/buildStatus/icon?job=springdoc-openapi-maven-plugin-IC)](https://ci-cd.springdoc.org:8443/view/springdoc-openapi-maven/job/springdoc-openapi-maven-plugin-IC/)
+[![Build](https://img.shields.io/github/actions/workflow/status/springdoc/springdoc-openapi-maven-plugin/snapshot.yml?branch=master&label=build)](https://github.com/springdoc/springdoc-openapi-maven-plugin/actions/workflows/snapshot.yml?query=branch%3Amaster)
 
 ## **Introduction to springdoc-openapi-maven-plugin**
 

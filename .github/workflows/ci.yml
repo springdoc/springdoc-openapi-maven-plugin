@@ -1,0 +1,35 @@
+# Builds every pull request.
+name: CI
+
+on:
+  pull_request:
+    paths-ignore: ['**.md']
+  workflow_dispatch:
+
+# Supersede in-flight runs for the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  MAVEN_ARGS: -B -V --no-transfer-progress
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # JDK 17 as in .sdkmanrc; the plugin itself is still compiled for Java 8.
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: temurin
+          cache: maven
+
+      # -Pgpg with -Dgpg.skip also builds the sources and javadoc jars, as a release would.
+      - name: Build
+        run: ./mvnw $MAVEN_ARGS -Pgpg -Dgpg.skip verify

@@ -1,0 +1,78 @@
+# Cuts a release: tags it, publishes to Maven Central, bumps to the next SNAPSHOT.
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Version to release, e.g. 1.6'
+        required: true
+      developmentVersion:
+        description: 'Next development version, e.g. 1.7-SNAPSHOT'
+        required: true
+      dryRun:
+        description: 'Rehearse only: no tag, no push, no publish'
+        type: boolean
+        default: false
+
+# release:prepare pushes the version-bump commits and the tag.
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+# ./mvnw pins Maven 3.9.x (.mvn/wrapper): Maven 3.10 restricts where server credentials
+# are sent (repositoryOrigins), which makes the Central uploads fail with 401.
+env:
+  MAVEN_ARGS: -B -V --no-transfer-progress
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # release:prepare inspects history and tags.
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: temurin
+          cache: maven
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+      - name: Configure git
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          # <scm> uses an SSH URL, and release:perform clones it fresh into
+          # target/checkout. The runner has no SSH key, so route it over HTTPS.
+          git config --global url."https://x-access-token:${GITHUB_TOKEN}@github.com/".insteadOf 'git@github.com:'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # -Pgpg is required: maven-release-plugin is declared inside the gpg profile,
+      # so without it none of its configuration applies (tag name, releaseProfiles).
+      - name: Release
+        run: |
+          ./mvnw $MAVEN_ARGS -Pgpg release:prepare release:perform \
+            -DreleaseVersion='${{ inputs.releaseVersion }}' \
+            -DdevelopmentVersion='${{ inputs.developmentVersion }}' \
+            -DdryRun=${{ inputs.dryRun }}
+        env:
+          MAVEN_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Clean up a dry run
+        if: ${{ inputs.dryRun }}
+        run: ./mvnw $MAVEN_ARGS -Pgpg release:clean
