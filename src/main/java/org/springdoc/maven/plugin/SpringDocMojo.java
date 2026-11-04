@@ -31,12 +31,12 @@ public class SpringDocMojo extends AbstractMojo {
 	/**
 	 * The DEFAULT OUTPUT EXTENSION.
 	 */
-	private static final String DEFAULT_OUTPUT_EXTENSION= ".json";
+	private static final String DEFAULT_OUTPUT_EXTENSION= "json";
 
 	/**
 	 * The DEFAULT OUTPUT FILE.
 	 */
-	private static final String DEFAULT_OUTPUT_FILE = DEFAULT_OUTPUT_FILE_NAME+DEFAULT_OUTPUT_EXTENSION;
+	private static final String DEFAULT_OUTPUT_FILE = DEFAULT_OUTPUT_FILE_NAME + "." + DEFAULT_OUTPUT_EXTENSION;
 
 	/**
 	 * The URL from where the api doc is retrieved.
@@ -62,6 +62,13 @@ public class SpringDocMojo extends AbstractMojo {
 	 */
 	@Parameter(defaultValue = "false", property = "springdoc.attachArtifact")
 	private boolean attachArtifact;
+
+	/**
+	 * Classifier of the attached artifact. Use a different one in each execution
+	 * that attaches its file, otherwise each attached file replaces the previous one.
+	 */
+	@Parameter(defaultValue = DEFAULT_OUTPUT_FILE_NAME, property = "springdoc.attachArtifactClassifier")
+	private String attachArtifactClassifier;
 
 	/**
 	 * The Project.
@@ -131,7 +138,7 @@ public class SpringDocMojo extends AbstractMojo {
 	 */
 	private void addArtifactToMaven(File outputFile) {
 		String extension = getFileExtension();
-		projectHelper.attachArtifact(project, extension, DEFAULT_OUTPUT_FILE_NAME, outputFile);
+		projectHelper.attachArtifact(project, extension, attachArtifactClassifier, outputFile);
 	}
 
 	/**

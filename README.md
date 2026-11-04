@@ -139,6 +139,7 @@ example `mvn verify -Dspringdoc.skip=true`.
 | `outputFileName` | `springdoc.outputFileName` | `openapi.json` | Name of the generated file |
 | `outputDir` | `springdoc.outputDir` | `${project.build.directory}` | Directory of the generated file |
 | `attachArtifact` | `springdoc.attachArtifact` | `false` | Attach the file to the project, so it is installed and deployed with the other artifacts (classifier `openapi`) |
+| `attachArtifactClassifier` | `springdoc.attachArtifactClassifier` | `openapi` | Classifier of the attached file |
 | `headers` | | none | HTTP headers sent with the request, for example for authentication |
 | `timeout` | `springdoc.timeout` | `60` | Connect and read timeout of the request, in seconds (`0` for none) |
 | `skip` | `springdoc.skip` | `false` | Skip the execution |
@@ -177,7 +178,8 @@ example `mvn verify -Dspringdoc.skip=true`.
 
 - 📄 **YAML**: point `apiDocsUrl` to `http://localhost:8080/v3/api-docs.yaml` and set `outputFileName` to `openapi.yaml`.
 - 🗂️ **Groups**: add one `<execution>` per [group](https://springdoc.org/faq.html#_how_can_i_define_multiple_openapi_definitions_in_one_spring_boot_project),
-  each with its own `apiDocsUrl` (for example `http://localhost:8080/v3/api-docs/admin`) and `outputFileName`.
+  each with its own `apiDocsUrl` (for example `http://localhost:8080/v3/api-docs/admin`) and `outputFileName`,
+  and its own `attachArtifactClassifier` if the files are attached.
 - ✨ **Pretty-printed JSON**: the file is saved exactly as served, so enable
   `springdoc.writer-with-default-pretty-printer=true` in the application, for example in the `spring-boot-maven-plugin`
   configuration:
