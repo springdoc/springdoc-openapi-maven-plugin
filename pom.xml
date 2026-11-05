@@ -45,10 +45,9 @@
 		<!-- Users can run the plugin on Java 8; it is built with JDK 17 (.sdkmanrc). -->
 		<maven.compiler.release>8</maven.compiler.release>
 		<maven.version>3.8.9</maven.version>
-		<maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
-		<maven-release-plugin.version>3.1.1</maven-release-plugin.version>
-		<central-publishing-maven-plugin.version>0.11.0
-		</central-publishing-maven-plugin.version>
+		<maven-gpg-plugin.version>3.2.8</maven-gpg-plugin.version>
+		<maven-release-plugin.version>3.3.1</maven-release-plugin.version>
+		<central-publishing-maven-plugin.version>0.12.0</central-publishing-maven-plugin.version>
 		<maven-javadoc-plugin.version>3.12.0</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>3.4.0</maven-source-plugin.version>
 	</properties>
@@ -99,12 +98,12 @@
 		<dependency>
 			<groupId>org.apache.maven.reporting</groupId>
 			<artifactId>maven-reporting-api</artifactId>
-			<version>3.1.0</version>
+			<version>3.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.reporting</groupId>
 			<artifactId>maven-reporting-impl</artifactId>
-			<version>3.1.0</version>
+			<version>3.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
