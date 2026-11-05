@@ -1,0 +1,32 @@
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      maven-plugins:
+        patterns: ['*']
+        update-types: [minor, patch]
+    ignore:
+      # The Maven API version is the oldest Maven the plugin is built against (prerequisites: 3.6.3).
+      - dependency-name: 'org.apache.maven:maven-plugin-api'
+      - dependency-name: 'org.apache.maven:maven-core'
+      - dependency-name: 'org.apache.maven:maven-artifact'
+      # 4.x needs Doxia 2, which only works with maven-site-plugin 3.20+.
+      - dependency-name: 'org.apache.maven.reporting:*'
+        update-types: ['version-update:semver-major']
+      # JUnit 6 needs Java 17; the tests are compiled with --release 8.
+      - dependency-name: 'org.junit:junit-bom'
+        update-types: ['version-update:semver-major']
+      # Maven 3.10 restricts where server credentials are sent, which breaks the Central upload.
+      - dependency-name: 'org.apache.maven:apache-maven'
+        versions: ['>=3.10']
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns: ['*']
