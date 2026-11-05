@@ -110,6 +110,13 @@
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Binding for the slf4j-api 1.7 that maven-core brings to the tests, to silence its warning. -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-nop</artifactId>
+			<version>1.7.36</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
