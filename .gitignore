@@ -142,3 +142,9 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
+
+######################
+# Claude Code
+######################
+/CLAUDE.md
+/.claude/
