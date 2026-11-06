@@ -87,7 +87,7 @@ Add both plugins to the `<build><plugins>` section of your `pom.xml`:
 <plugin>
   <groupId>org.springdoc</groupId>
   <artifactId>springdoc-openapi-maven-plugin</artifactId>
-  <version>1.5</version>
+  <version>1.6</version>
   <executions>
     <execution>
       <id>integration-test</id>
@@ -149,7 +149,7 @@ example `mvn verify -Dspringdoc.skip=true`.
 <plugin>
   <groupId>org.springdoc</groupId>
   <artifactId>springdoc-openapi-maven-plugin</artifactId>
-  <version>1.5</version>
+  <version>1.6</version>
   <executions>
     <execution>
       <id>integration-test</id>
